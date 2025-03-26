@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joke Of The Day</title>
+    <style>
+        body{
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        h1{
+            text-align: center;
+        }
+        #joke-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        #joke-text {
+            background-color: #f0f0f0; /* Light grey background */
+            padding: 15px;
+            border-radius: 8px; /* Rounded corners */
+            border: 1px solid #ccc; /* Grey border */
+            max-width: 80%;
+            text-align: center;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="joke-title">😂 Joke Of The Day</h1>
+    <p id="joke-text">Loading joke...</p>
+
+    <button onclick="fetchJoke('Programming')">💻 Programming</button>
+    <button onclick="fetchJoke('Miscellaneous')">🎭 Miscellaneous</button>
+    <button onclick="fetchJoke('Pun')">😆 Pun</button>
+    <button onclick="fetchJoke('Spooky')">👻 Spooky</button>
+    <button onclick="fetchJoke('Christmas')">🎄 Christmas</button>
+
+    <script>
+        async function fetchJoke(category, isFirstLoad = false) {
+            const url = `https://v2.jokeapi.dev/joke/${category}?safe-mode`;
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                let joke = data.type === "twopart" ? `${data.setup} ... ${data.delivery}` : data.joke;
+
+                document.getElementById("joke-text").innerText = joke;
+                if (!isFirstLoad) {
+                    document.getElementById("joke-title").innerText = category === "Pun" ? "A Random Pun" : `A Random ${category} Joke`;
+                }
+            } catch (error) {
+                document.getElementById("joke-text").innerText = "Failed to fetch a joke. Try again!";
+            }
+        }
+
+        // Load a random joke when the page first loads
+        fetchJoke("Any", true);
+    </script>
+</body>
+</html>
